@@ -1,0 +1,266 @@
+API_CODE,DESCRIPTION_ENGLISH,COUNTRY
+ADI,Other operating revenues,Norway
+ADK,Other operating expenses,Norway
+AEK,Other equity,Norway
+AEKK,Uncovered loss,Norway
+AFA,Other financial fixed assets,Norway
+AFI,Other financial income,Norway
+AFK,Total other financial expenses,Norway
+AFKK,Other financial expenses,Norway
+AFM,Other financial instruments,Norway
+AFV,Provisions - Fair value adjustments,Norway
+AID,Shares/investment in subsidiaries,Norway
+AIM,Other intangible fixed assets,Norway
+AIV,Other investments,Norway
+AK,Share capital,Norway/Denmark
+AKG,Other short-term liabilities,Norway
+AKR,Other creditors,Norway
+AKSB,Shareholder contribution,Norway
+ALG,Total other long-term liabilities,Norway
+ALK,Liable loan capital,Norway
+AMF,Other marked based financial instruments,Norway
+ANDLØ,Other benefits general manager,Norway
+ANF,Other receivables,Norway
+ANFF,Other financial receivables,Norway
+ANIE,Other equity deposits,Norway
+ANLG,Other long-term liabilities,Norway
+ANT,Employees from accounting,Norway/Denmark
+AOM,Other current assets,Norway
+ARI,Other interest income,Norway
+ARK,Other interest expenses,Norway
+ARKA,Working capital,Norway
+AV,Other inventories,Norway
+AVD,Other operation factors,Norway
+AVS,Other provisions,Norway
+AVUB,Provisions for dividends,Norway
+BE,Changes in work in progress,Norway
+BEE,Inventory changes self-manufactured goods,Norway
+BEEA,Change in inventory of self-manufactured fixed assets,Norway
+BET,Stock changes finished goods,Norway
+BF,Gross earnings in %,Norway
+BS,Payable tax,Norway
+Currency,Currency,Norway
+DR,Operating result,Norway
+EB,Land buildings and other real property,Norway/Denmark
+EBEF,Change in inventory of self-manufactured and finished goods,Norway
+EBITDA,Earnings Before Interest Taxes Depreciation and Amortization,Norway
+EGA,Own shares,Norway
+EI,Extraordinary income,Norway
+EK,Extraordinary expenses,Norway
+EKA,Equity-to-asset ratio in % / solvency ratio,Norway/Denmark
+EKAVO,Equity's share of turnover,Norway
+ER,Return on net capital in %,Norway/Denmark
+ERE,Return on net capital (a.t. in %),Norway
+FDS,Receivables to companies in the same group,Norway
+FFFO,Reserves,Norway
+FFUG,Provisions - temporary adjustment investment gains/losses,Norway
+FFV,Valuation reserve,Norway
+FG1,Financing ratio I,Norway
+FI,Financial income,Norway/Denmark
+FK,Financial expenses,Norway
+FONE,Bonus issues,Norway
+FOU,Research and development,Norway
+GG,Debt ratio,Norway
+GLA,Goodwill,Norway/Denmark
+GTD,Long-term group contribution liabilities,Norway
+GTI,Liabilities to financial institutions,Norway
+GTS,Guarantee liabilities,Norway
+HUSLK,Rent,Norway
+IFS,Investments in group companies,Norway
+IPA,Revenue from group companies,Norway
+IPI,Revenue from subsidiaries,Norway
+IPT,Revenus from associated companies,Norway
+IRK,Other paid-in capital,Norway
+ITS,Investments in associated companies,Norway
+IVEI,Invested property,Norway
+IAA,Investments in shares and interests,Norway
+KB,Group contribution,Norway
+KBP,Bank deposits cash etc.,Norway
+KBPS,Total funds/bank/post,Norway
+KGA,Short term liabilities ratio (in %),Norway
+KL,Convertible loans,Norway
+KLON,Only wages,Norway
+KOH,Asset turnover,Norway
+KPL,Consessions patents licences trademarks and similar rights,Norway
+KSK,Unpaid subscribed capital,Norway
+KSL,Certificate loan,Norway
+KUF,Customer accounts receivables,Norway
+KVL,Convertible loan,Norway
+LEDPS,Pension cost general manager,Norway
+LFK,Loan to group companies,Norway
+LG,Trade creditors,Norway
+LGA,Long term liabilities ratio (in %),Norway
+LGR,Liquidity ratio I,Norway/Denmark
+LGR2,Liquidity ratio II,Norway
+LGR3,Liquidity ratio III,Norway
+LI,Rental revenues,Norway
+LIMKA,Overdraft limit,Norway
+LL,Manager salary,Norway
+LLF,Long-time stockfinancing in %,Norway
+LT,Stocktime in days,Norway
+LTK,Loans to associated companies and joint ventures,Norway
+LTP,Wages salaries and social security expenses,Norway
+MA,Minority share before annual result,Norway/Denmark
+MAK,Market-based shares,Norway
+MAO,Market-based bonds,Norway
+MAS,Short-term liabilities to companies in the same group,Norway
+MI,Movables/fixtures/equipment/cars,Norway
+MIN,Minority interests,Norway
+MINK,Minority after accrued equity,Norway
+MOA,Machinery and plants,Norway
+MU,Dividend,Norway
+NE,Net extraordinary income,Norway
+NF,Total/net financial items,Norway
+NFA,Whrite-downs on financial fixed assets,Norway
+NFO,Whrite-downs on other financial current assets,Norway
+NVD,Writedown of fixed and intangible assets,Norway/Denmark
+OAE,Allocation other equity/covering of previous uncovered loss,Norway
+OAEE,Uncovered loss,Norway
+OBL,Bond loans,Norway
+OBLG,Bonds,Norway
+OBLNM,Mandatory occupational pension,Norway
+OFA,VAT public duties payable,Norway
+OFUG,Provisions temporary adjustments investments gains/losses,Norway
+OG,Profit ratio / profit margin /EBIT margin,Norway/Denmark
+OKF,Share premium reserve,Norway
+OOF,Bonds and other accounts receivables,Norway
+OOF3,Other accounts receivable,Norway
+OPA,Revenues pr employee,Norway
+OPAV,Turnover per man-year,Norway
+OPLK,Revenues pr wageunit,Norway
+OR,Ordinary result,Norway/Denmark
+ORA,Ordinary depreciation,Norway
+ORS,Ordinary result before taxes,Norway/Denmark
+OTFF,Reserve transfers,Norway
+PF,Long-term pension commitments,Norway
+PG,Mortgage debt/liabilities to financial institutions,Norway
+PNKO,Pension costs,Norway
+PSM,Pension funds,Norway
+PST,Mortgage debt,Norway
+RDG,Interest coverage ratio in %,Norway
+REVAN,Other auditor fee,Norway
+REVHO,Auditors fee,Norway
+RFF,Interest income from group companies,Norway
+RG,Operating margin in %,Norway
+RTK,Other interest expenses from group companies,Norway
+SAM,Total fixed assets,Norway
+SAP,Total provisions for liabilities and charges,Norway
+SDI,Total operating revenues,Norway/Denmark
+SDK,Total operating expenses,Norway
+SED,Total assets,Norway
+SEK,Total equity,Norway/Denmark
+SF,Total receivable,Norway
+SFA,Total financial fixed assets,Norway
+SG,Total liabilities,Norway
+SGE,Total liabilities and equity,Norway
+SI,Sales revenues,Norway
+SIA,Total intangible fixed assets,Norway
+SIK,Total equity deposits,Norway
+SIV,Total investments,Norway
+SKG,Total short-term liabilities,Norway/Denmark
+SKO,Tax on ordinary result,Norway
+SKR,Tax on extraordinary result,Norway
+SLF,Unpaid wages and salaries,Norway
+SLG,Total long-term liabilities,Norway
+SOK,Total retained earnings,Norway
+SOM,Total current assets,Norway
+SOVE,Total transfers and allovations,Norway
+SRF,Ship rig aeroplane etc.,Norway
+SUB,Allocation dividends,Norway
+SUBE,Extraordinary dividend,Norway
+SUBT,Additional dividend,Norway
+SV,Total inventories,Norway
+SVA,Total inventories,Norway
+SVD,Total fixed assets,Norway
+TPF,Bad depts,Norway
+TR,Profitability (Total profitability in %),Norway
+UBNKA,Unused overdraft,Norway
+US,Deferred tax liabilities,Norway
+USF,Deferred tax asset,Norway
+UTB,Suggested dividend,Norway
+VAFI,Reduction of other financial instruments valued at fair value,Norway
+VBI,Biological assets,Norway
+VF,Materials inventory costs,Norway
+VMF,Change in value of quoted financial current assets,Norway
+VMFO,Reduction in quoted financial current assets,Norway
+VOH,Inventory turnover rate,Norway
+VØKF,Increase in quoted financial current assets,Norway
+VØKI,Increase in value of financial instruments valued at fair value,Norway
+AAK,Shares and interests in group companies,Norway
+AAM,Other fixed assets,Norway
+AARK,Net result before minority interests,Norway
+AARS,Net result/profit for the year,Norway/Denmark
+KON1,Net cash flow from operating activities,Norway
+KON2,Cash flow from operating activities before change in working capital,Norway
+KON3,Net cash flow from change in working capital,Norway
+KON4,Net cash flow from investing activities,Norway
+KON5,Net cash flow from financing activities/financial virksomhet,Norway
+KON6,Net cash flow for the period,Norway
+KON7,Effect from currency fluctuation on cash and cash equivalents,Norway
+KON8,Net change cash and cash equivalents,Norway
+KON9,Cash and cash equivalents at the start of the period (01.01),Norway
+KON10,Cash and cash equivalents at the end of the period (31.12),Norway
+KON11,Unused overdraft,Norway
+KON12,Overdraft limit,Norway
+KON13,Other modifications (merger overdraft etc.),Norway
+KON14,Other modifications (overdraft bank deposit etc. other corrections),Norway
+costs,Product consumption,Denmark
+bruttofort,Gross profit,Denmark
+PERSOMK,Personnel costs,Denmark
+PR,Primary result,Denmark
+FU,Financial expenses,Denmark
+other_net_financial_income,Other financial income or expenses net,Denmark
+FPN,Financial posts net,Denmark
+EXP,Extraordinary posts,Denmark
+SKATAAR,Tax net result,Denmark
+IMMA,Total intangible fixed assets,Denmark
+DRM,Other plants and operating assets,Denmark
+other_property_plant_and_equipment,Other tangible fixed assets,Denmark
+MAI,Total tangible fixed assets,Denmark
+noncurrent_investments,Equity shares,Denmark
+KAPI,Long-term receivables,Denmark
+other_noncurrent_financial_assets,Other long-term financial fixed asset,Denmark
+FAA,Financial assets,Denmark
+anlagsaktiviteter,Total fixed assets,Denmark
+VL,Inventories,Denmark
+TFST,Receivables from sales and services,Denmark
+THNP,Receivables from related parties,Denmark
+ATG,Other receivables,Denmark
+VP,Securities,Denmark
+likvider,Liquid funds,Denmark
+OMAI,Total current assets,Denmark
+balance,Status balance,Denmark
+OVR,Transferable profit / Transfered result,Denmark
+FSUB,Dividend,Denmark
+OER,Other reserves,Denmark
+EFMA,Equity before minority interests' share,Denmark
+USKAT,Deferred tax,Denmark
+hensettelser,Provision,Denmark
+long_term_mortgage_debt,Long-term debt to mortgage credit institutions,Denmark
+long_term_debt_to_banks,Long-term debt to banks,Denmark
+LGNP,Long-term debt to related parties,Denmark
+other_long_term_debt,Other long-term debt,Denmark
+ANSVL,Responsible loan capital,Denmark
+KGNP,Short-term debt to related parties,Denmark
+short_term_mortgage_debt,Short-term debt to mortgage credit institutions,Denmark
+short_term_debt_to_banks,Short-term debt to banks,Denmark
+short_term_tax_payables,Corporation tax,Denmark
+VK,Trade creditors,Denmark
+AG,Other debts,Denmark
+PASSI,Total liabilities,Denmark
+DG,Gross margin,Denmark
+Kapacitetsgrad,Capacity ratio,Denmark
+afkastningsgrad,Return rate,Denmark
+other_intangible_assets,Other intangible fixed assets,Denmark
+avk_eget_kapital,Return on equity in %,Sweden
+avk_totalt_kapital,Return on total capital in %,Sweden
+RPE,Revenue per employee,Sweden
+CPE,Cost per employee,Sweden
+loner_ovriga,Other wages and salaries,Sweden
+loner_styrelse_vd,Board and CEO salaries,Sweden
+resultat_e_avskrivningar,Result before depreciation,Sweden
+resultat_e_finansnetto,Result before financial net,Sweden
+SKGKI,Short-term liabilities to group companies (internal),Sweden
+summa_finansiella_anltillg,Total financial fixed assets,Sweden
+summa_langfristiga_skulder,Total long-term liabilities,Sweden
+summa_rorelsekostnader,Total operating expenses,Sweden
