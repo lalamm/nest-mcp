@@ -1,0 +1,28 @@
+# Rust build artifacts
+target/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation and development files
+README.md
+todo.md
+converter.ipynb
+.env
+.env.local
+
+# Raw data files (we only need the processed parquet file)
+raw/
+
+# Temporary files
+*.tmp
+*.log
