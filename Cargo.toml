@@ -19,3 +19,4 @@ tracing-subscriber = { version = "0.3", features = [
     "std",
     "fmt",
 ] }
+schemars = { version = "1.0.4", features = ["derive"] }

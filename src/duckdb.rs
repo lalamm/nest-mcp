@@ -132,54 +132,6 @@ impl DuckDB {
         let value: Value = serde_json::from_str(&result).context("Failed to parse JSON result")?;
         serde_json::to_string_pretty(&value).context("Failed to format JSON")
     }
-
-    pub fn attach_to_ducklake(&self) -> Result<()> {
-        let db_name = env::var("DB_NAME").expect("DB_NAME must be set");
-        let db_host = env::var("DB_HOST").expect("DB_HOST must be set");
-        let db_port = env::var("DB_PORT").expect("DB_PORT must be set");
-        let db_user = env::var("DB_USER").expect("DB_USER must be set");
-        let db_password = env::var("DB_PASSWORD").expect("DB_PASSWORD must be set");
-        let s3_data = "/tmp/data";
-        // let s3_data = env::var("S3_DATA").expect("S3_DATA must be set");
-
-        self.conn
-            .execute("INSTALL mysql", [])
-            .context("Failed to install mysql extension")?;
-        self.conn
-            .execute("INSTALL ducklake", [])
-            .context("Failed to install ducklake extension")?;
-        self.conn
-            .execute(
-                &format!(
-                    r#"
-                    CREATE SECRET (
-                        TYPE mysql,
-                        HOST '{}',
-                        PORT {},
-                        DATABASE {},
-                        USER {},
-                        PASSWORD {}
-                    )"#,
-                    db_host, db_port, db_name, db_user, db_password
-                ),
-                [],
-            )
-            .context("Failed to create mysql secret")?;
-        self.conn
-            .execute(
-                &format!(
-                    "ATTACH 'ducklake:mysql:db={}' AS lake (DATA_PATH '{}', METADATA_SCHEMA '{}')",
-                    db_name, s3_data, db_name
-                ),
-                [],
-            )
-            .context("Failed to attach ducklake database")?;
-        self.conn
-            .execute("USE lake", [])
-            .context("Failed to switch to lake database")?;
-
-        Ok(())
-    }
 }
 
 #[cfg(test)]
@@ -300,16 +252,6 @@ mod tests {
         let _ = std::fs::remove_file(std::env::temp_dir().join("duck.db"));
         let _ = std::fs::remove_file(std::env::temp_dir().join("custom_test.db"));
 
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn test_ducklake() -> Result<()> {
-        let db = create_test_db("ducklake_example")?;
-        db.attach_to_ducklake()?;
-        db.execute("CREATE TABLE IF NOT EXISTS nl_train_stations AS FROM 'https://blobs.duckdb.org/nl_stations.csv'")?;
-
-        cleanup_test_db("ducklake_example");
         Ok(())
     }
 }
