@@ -104,7 +104,7 @@ impl Tool {
             "Trade creditors" DOUBLE
         );
 
-        hello_nest (
+        'hello_nest.parquet' (
             company_id BIGINT,
             name VARCHAR,
             organization_number BIGINT,
@@ -244,7 +244,7 @@ impl Tool {
                 "Trade creditors" DOUBLE
             );
 
-            hello_nest (
+            'hello_nest.parquet' (
                 company_id BIGINT,
                 name VARCHAR,
                 organization_number BIGINT,
