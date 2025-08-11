@@ -7,7 +7,7 @@ use tracing_subscriber::{
 mod duckdb;
 mod tool;
 
-const BIND_ADDRESS: &str = "127.0.0.1:8000";
+const BIND_ADDRESS: &str = "127.0.0.1:8080";
 
 pub async fn serve() -> anyhow::Result<()> {
     tracing_subscriber::registry()
