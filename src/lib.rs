@@ -4,22 +4,27 @@ use tracing_subscriber::{
     util::SubscriberInitExt,
     {self},
 };
+use std::env;
 mod duckdb;
 mod tool;
-
-const BIND_ADDRESS: &str = "127.0.0.1:8080";
 
 pub async fn serve() -> anyhow::Result<()> {
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "debug".to_string().into()),
+                .unwrap_or_else(|_| "info".to_string().into()),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    // Use PORT environment variable for Cloud Run, fallback to 8000
+    let port = env::var("PORT").unwrap_or_else(|_| "8000".to_string());
+    let bind_address = format!("0.0.0.0:{}", port);
+    
+    tracing::info!("Attempting to bind to: {}", bind_address);
+
     let config = SseServerConfig {
-        bind: BIND_ADDRESS.parse()?,
+        bind: bind_address.parse()?,
         sse_path: "/sse".to_string(),
         post_path: "/message".to_string(),
         ct: tokio_util::sync::CancellationToken::new(),
@@ -29,6 +34,8 @@ pub async fn serve() -> anyhow::Result<()> {
     let (sse_server, router) = SseServer::new(config);
 
     let listener = tokio::net::TcpListener::bind(sse_server.config.bind).await?;
+    
+    tracing::info!("Successfully bound to: {}, server ready for connections", sse_server.config.bind);
 
     let ct = sse_server.config.ct.child_token();
 
