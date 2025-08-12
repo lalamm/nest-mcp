@@ -37,7 +37,7 @@ WORKDIR /app
 COPY --from=builder /app/target/release/nest-mcp /app/nest-mcp
 
 # Copy the parquet data file
-COPY hello_nest.parquet /app/hello_nest.parquet
+COPY nest_mcp.db /app/nest_mcp.db
 
 # Change ownership to the non-root user
 RUN chown -R appuser:appuser /app
