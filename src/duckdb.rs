@@ -18,12 +18,12 @@ pub struct DuckDbConfig {
 impl Default for DuckDbConfig {
     fn default() -> Self {
         Self {
-            db_filename: "duck.db".into(),
+            db_filename: "nest_mcp.db".into(),
             http_timeout: Duration::from_secs(15 * 60),
             http_keep_alive: true,
             http_retries: 3,
             s3_uploader_thread_limit: 64,
-            temp_directory: env::temp_dir(),
+            temp_directory: std::env::current_dir().unwrap_or_else(|_| env::temp_dir()),
             max_temp_directory_size: "10 GB".into(),
             access_mode: AccessMode::Automatic,
         }
@@ -39,6 +39,7 @@ impl DuckDB {
         let db_path = config.temp_directory.join(&config.db_filename);
         let duck_config = Config::default().access_mode(config.access_mode)?;
         let conn = Connection::open_with_flags(db_path, duck_config)?;
+
         conn.pragma_update(
             None,
             "http_timeout",
@@ -56,6 +57,7 @@ impl DuckDB {
             "max_temp_directory_size",
             &config.max_temp_directory_size,
         )?;
+
         conn.execute(
             r#"
             CREATE SECRET (
@@ -67,6 +69,7 @@ impl DuckDB {
             [],
         )
         .context("Failed to create s3 credentials")?;
+
         Ok(Self { conn })
     }
 
@@ -74,6 +77,79 @@ impl DuckDB {
         let mut config = DuckDbConfig::default();
         config.access_mode = AccessMode::ReadWrite;
         return Self::new(config).await;
+    }
+
+    /// Inspect the parquet file schema
+    pub fn inspect_parquet_schema(&self) -> Result<String> {
+        let schema_sql = "DESCRIBE SELECT * FROM 'hello_nest.parquet' LIMIT 1";
+        self.query_all_json(schema_sql)
+    }
+
+    /// Create the hello_nest table from the parquet file with proper schema
+    pub fn create_hello_nest_table(&self) -> Result<()> {
+        // Drop existing table if it exists
+        self.conn.execute("DROP TABLE IF EXISTS hello_nest", [])?;
+
+        // First, let's inspect the parquet file structure
+        match self.inspect_parquet_schema() {
+            Ok(_) => {}
+            Err(_) => {}
+        }
+
+        // Create table with basic structure first - debug JSON fields later
+        let create_sql = r#"
+        CREATE TABLE hello_nest AS
+        SELECT
+            company_id,
+            name AS company_name,
+            organization_number,
+            company_type,
+            company_purpose,
+            CASE
+                WHEN established_date IS NULL OR established_date = '' THEN NULL
+                ELSE TRY_CAST(established_date AS DATE)
+            END AS established_date,
+            foundation_year,
+            registered_for_payroll_tax,
+            homepage,
+            postal_address,
+            visitor_address,
+            CASE
+                WHEN nace_categories IS NULL OR nace_categories = '' OR nace_categories = '[]' OR nace_categories = 'null' THEN NULL
+                ELSE json_extract(nace_categories, '$')::VARCHAR[]
+            END AS nace_categories,
+            CASE
+                WHEN location IS NULL OR location = '' OR location = '{}' THEN NULL
+                ELSE STRUCT_PACK(
+                    county := json_extract_string(location, '$.county'),
+                    countryPart := json_extract_string(location, '$.countryPart'),
+                    municipality := json_extract_string(location, '$.municipality'),
+                    coordinates := CASE
+                        WHEN json_extract(location, '$.coordinates') IS NULL THEN NULL
+                        ELSE STRUCT_PACK(
+                            XCoordinate := CAST(json_extract(location, '$.coordinates[0].XCoordinate') AS DOUBLE),
+                            YCoordinate := CAST(json_extract(location, '$.coordinates[0].YCoordinate') AS DOUBLE),
+                            coordinateSystem := json_extract_string(location, '$.coordinates[0].coordinateSystem')
+                        )
+                    END
+                )
+            END AS location,
+            "financiaL_data" AS financial_data
+        FROM 'hello_nest.parquet'
+        "#;
+
+        self.conn
+            .execute(create_sql, [])
+            .context("Failed to create hello_nest table")?;
+
+        Ok(())
+    }
+
+    /// Get table info to verify schema
+    pub fn get_table_info(&self, table_name: &str) -> Result<String> {
+        let sql = format!("DESCRIBE {}", table_name);
+        let result = self.query_all_json(&sql)?;
+        Ok(result)
     }
 
     pub fn execute(&self, sql: &str) -> Result<usize> {
@@ -117,7 +193,7 @@ impl DuckDB {
 
     pub fn query_all_json(&self, sql: &str) -> Result<String> {
         let json_sql = format!(
-            "SELECT json_group_array(to_json(row_data)) FROM ({}) as row_data",
+            "SELECT COALESCE(json_group_array(to_json(row_data)), '[]') FROM ({}) as row_data",
             sql.trim_end_matches(';')
         );
 
@@ -128,9 +204,14 @@ impl DuckDB {
 
         let result: String = stmt
             .query_row([], |row| row.get(0))
-            .context("Failed to execute JSON query")?;
+            .with_context(|| format!("Failed to execute JSON query: {}", json_sql))?;
         let value: Value = serde_json::from_str(&result).context("Failed to parse JSON result")?;
         serde_json::to_string_pretty(&value).context("Failed to format JSON")
+    }
+
+    /// Query all results as JSON - same as query_all_json since no normalization
+    pub fn query_all_json_normalized(&self, sql: &str) -> Result<String> {
+        self.query_all_json(sql)
     }
 }
 
@@ -223,6 +304,7 @@ mod tests {
         let mut config = DuckDbConfig::default();
         config.access_mode = AccessMode::ReadWrite;
         let db_rw = DuckDB::new(config).await?;
+        db_rw.execute("DROP TABLE IF EXISTS test_access")?;
         db_rw.execute("CREATE TABLE test_access (id INTEGER, name VARCHAR)")?;
         db_rw.execute("INSERT INTO test_access VALUES (1, 'test')")?;
 
@@ -237,6 +319,7 @@ mod tests {
         custom_config.access_mode = AccessMode::ReadWrite;
         custom_config.db_filename = "custom_test.db".to_string();
         let db_custom = DuckDB::new(custom_config).await?;
+        db_custom.execute("DROP TABLE IF EXISTS test_custom")?;
         db_custom.execute("CREATE TABLE test_custom (id INTEGER)")?;
         db_custom.execute("INSERT INTO test_custom VALUES (42)")?;
 

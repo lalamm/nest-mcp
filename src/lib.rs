@@ -5,7 +5,7 @@ use tracing_subscriber::{
     {self},
 };
 use std::env;
-mod duckdb;
+pub mod duckdb;
 mod tool;
 
 pub async fn serve() -> anyhow::Result<()> {
