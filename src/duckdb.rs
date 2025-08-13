@@ -194,7 +194,7 @@ impl DuckDB {
     pub fn query_all_json(&self, sql: &str) -> Result<String> {
         let json_sql = format!(
             "SELECT COALESCE(json_group_array(to_json(row_data)), '[]') FROM ({}) as row_data",
-            sql.trim_end_matches(';')
+            sql.trim_end_matches([';', '\n']).trim()
         );
 
         let mut stmt = self
