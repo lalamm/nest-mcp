@@ -134,7 +134,7 @@ impl Tool {
             homepage VARCHAR,
             postal_address VARCHAR,
             visitor_address VARCHAR,
-            nace_categories VARCHAR[],
+            nace_categories VARCHAR,
             location STRUCT(
                 county VARCHAR,
                 coordinates STRUCT(
@@ -283,7 +283,7 @@ impl Tool {
                 homepage VARCHAR,
                 postal_address VARCHAR,
                 visitor_address VARCHAR,
-                nace_categories VARCHAR[],
+                nace_categories VARCHAR,
                 location STRUCT(
                     county VARCHAR,
                     coordinates STRUCT(
@@ -398,7 +398,6 @@ impl ServerHandler for Tool {
 fn build_company_search_query(search_request: &SearchRequest) -> Result<String, McpError> {
     let mut sql = "SELECT * FROM hello_nest WHERE 1=1".to_string();
     let mut conditions = Vec::new();
-    let mut has_text_search = false;
 
     if let Some(company_name) = &search_request.company_name {
         let trimmed_name = company_name.trim();
@@ -439,7 +438,6 @@ fn build_company_search_query(search_request: &SearchRequest) -> Result<String, 
     if let Some(nace_categories) = &search_request.nace_categories {
         if !nace_categories.is_empty() {
             let mut category_conditions = Vec::new();
-
             for category in nace_categories {
                 let trimmed_category = category.trim();
                 if !trimmed_category.is_empty() {
@@ -453,18 +451,15 @@ fn build_company_search_query(search_request: &SearchRequest) -> Result<String, 
                             None,
                         ));
                     }
-                    // Use array functions for searching in nace_categories array
                     category_conditions
-                        .push(format!("'{}' = ANY(nace_categories)", trimmed_category));
+                        .push(format!("nace_categories ILIKE '%{}%'", trimmed_category));
                 }
             }
-
             if !category_conditions.is_empty() {
                 conditions.push(format!("({})", category_conditions.join(" OR ")));
             }
         }
     }
-
     if let Some(company_purpose) = &search_request.company_purpose {
         let trimmed_purpose = company_purpose.trim();
         if !trimmed_purpose.is_empty() {
@@ -478,13 +473,7 @@ fn build_company_search_query(search_request: &SearchRequest) -> Result<String, 
                     None,
                 ));
             }
-            // Use DuckDB's full-text search with BM25 ranking for better performance
-            // The FTS index was created with company_id as the unique key and company_purpose as the text column
-            conditions.push(format!(
-                "fts_main_hello_nest.match_bm25(company_id, '{}') IS NOT NULL",
-                trimmed_purpose
-            ));
-            has_text_search = true;
+            conditions.push(format!("company_purpose ILIKE '%{}%'", trimmed_purpose));
         }
     }
 
@@ -557,16 +546,7 @@ fn build_company_search_query(search_request: &SearchRequest) -> Result<String, 
         sql.push_str(&conditions.join(" AND "));
     }
 
-    // Order by relevance (BM25 score) when company_purpose search is used, otherwise by company name
-    if has_text_search {
-        sql.push_str(" ORDER BY fts_main_hello_nest.match_bm25(company_id, '");
-        if let Some(company_purpose) = &search_request.company_purpose {
-            sql.push_str(&company_purpose.trim().replace("'", "''")); // Escape single quotes
-        }
-        sql.push_str("') DESC, company_name LIMIT 1000");
-    } else {
-        sql.push_str(" ORDER BY company_name LIMIT 1000");
-    }
+    sql.push_str(" ORDER BY company_name LIMIT 1000");
 
     Ok(sql)
 }
@@ -606,9 +586,9 @@ mod tests {
 
         let query = build_company_search_query(&search_request).unwrap();
 
-        // Should use ANY() syntax for VARCHAR[] array search
-        assert!(query.contains("'62010' = ANY(nace_categories)"));
-        assert!(query.contains("'62020' = ANY(nace_categories)"));
+        // Should use ILIKE syntax for VARCHAR search
+        assert!(query.contains("nace_categories ILIKE '%62010%'"));
+        assert!(query.contains("nace_categories ILIKE '%62020%'"));
         assert!(query.contains(" OR "));
     }
 
@@ -714,10 +694,10 @@ mod tests {
         let query = build_company_search_query(&search_request).unwrap();
 
         // Check that it properly handles:
-        // - VARCHAR[] for nace_categories with ANY()
+        // - VARCHAR for nace_categories with ILIKE
         // - STRUCT access for financial_data
         // - DATE type for established_date (implicitly tested by foundation_year)
-        assert!(query.contains("'62010' = ANY(nace_categories)"));
+        assert!(query.contains("nace_categories ILIKE '%62010%'"));
         assert!(query.contains("financial_data['2024']['Sales revenues']"));
         assert!(query.contains("financial_data['2024']['Employees from accounting']"));
         assert!(query.contains("foundation_year BETWEEN 2020 AND 2024"));
@@ -743,12 +723,12 @@ mod tests {
         let result = tool.company(query_request).await;
         assert!(result.is_ok(), "DATE query should work");
 
-        // Test VARCHAR[] type for nace_categories
+        // Test VARCHAR type for nace_categories
         let query_request = Parameters(QueryRequest {
-            sql: "SELECT company_name, array_length(nace_categories) FROM hello_nest WHERE nace_categories IS NOT NULL LIMIT 1".to_string(),
+            sql: "SELECT company_name, nace_categories FROM hello_nest WHERE nace_categories IS NOT NULL LIMIT 1".to_string(),
         });
         let result = tool.company(query_request).await;
-        assert!(result.is_ok(), "VARCHAR[] query should work");
+        assert!(result.is_ok(), "VARCHAR query should work");
 
         // Test STRUCT type for location
         let query_request = Parameters(QueryRequest {

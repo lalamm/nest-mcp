@@ -1,4 +1,9 @@
+
 # TODO
+- [ ] Full text search on company_purpose
+- [ ] Full text search on nace_categories (it should be a varchar not varchar[]) This also means the filters should have an or between them
+- [ ] remove and recreate hello_nest.db
+
 - [x] Scaffold MCP server code
 - [x] Convert csv to parquet and
 - [x] infer table schema (make sure structs are inferred correctly)
@@ -11,4 +16,3 @@
 - [x] Location as struct not varchar
 - [x] Allocation dividends always as double
 - [x] nacecategories as array of strings, not varchar
-- [x] Full text search on company_purpose

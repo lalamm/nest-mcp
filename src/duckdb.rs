@@ -75,7 +75,7 @@ impl DuckDB {
 
     pub async fn new_default() -> Result<Self> {
         let mut config = DuckDbConfig::default();
-        config.access_mode = AccessMode::ReadWrite;
+        config.access_mode = AccessMode::ReadOnly;
         return Self::new(config).await;
     }
 
@@ -116,7 +116,7 @@ impl DuckDB {
             visitor_address,
             CASE
                 WHEN nace_categories IS NULL OR nace_categories = '' OR nace_categories = '[]' OR nace_categories = 'null' THEN NULL
-                ELSE json_extract(nace_categories, '$')::VARCHAR[]
+                ELSE nace_categories
             END AS nace_categories,
             CASE
                 WHEN location IS NULL OR location = '' OR location = '{}' THEN NULL
