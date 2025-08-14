@@ -25,7 +25,7 @@ impl Default for DuckDbConfig {
             s3_uploader_thread_limit: 64,
             temp_directory: std::env::current_dir().unwrap_or_else(|_| env::temp_dir()),
             max_temp_directory_size: "10 GB".into(),
-            access_mode: AccessMode::Automatic,
+            access_mode: AccessMode::ReadOnly,
         }
     }
 }
