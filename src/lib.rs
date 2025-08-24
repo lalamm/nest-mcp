@@ -1,10 +1,11 @@
 use rmcp::transport::sse_server::{SseServer, SseServerConfig};
+use std::env;
 use tracing_subscriber::{
     layer::SubscriberExt,
     util::SubscriberInitExt,
     {self},
 };
-use std::env;
+mod auth;
 pub mod duckdb;
 mod tool;
 
@@ -20,7 +21,7 @@ pub async fn serve() -> anyhow::Result<()> {
     // Use PORT environment variable for Cloud Run, fallback to 8000
     let port = env::var("PORT").unwrap_or_else(|_| "8000".to_string());
     let bind_address = format!("0.0.0.0:{}", port);
-    
+
     tracing::info!("Attempting to bind to: {}", bind_address);
 
     let config = SseServerConfig {
@@ -32,10 +33,14 @@ pub async fn serve() -> anyhow::Result<()> {
     };
 
     let (sse_server, router) = SseServer::new(config);
+    let router = auth::attach_to_router(router);
 
     let listener = tokio::net::TcpListener::bind(sse_server.config.bind).await?;
-    
-    tracing::info!("Successfully bound to: {}, server ready for connections", sse_server.config.bind);
+
+    tracing::info!(
+        "Successfully bound to: {}, server ready for connections",
+        sse_server.config.bind
+    );
 
     let ct = sse_server.config.ct.child_token();
 
