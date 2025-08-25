@@ -1,7 +1,7 @@
 use axum::{
     Json, Router,
     extract::Request,
-    http::{HeaderMap, Method, StatusCode, header},
+    http::{HeaderMap, Method, StatusCode},
     middleware::{self, Next},
     response::{IntoResponse, Response},
     routing::get,
@@ -56,7 +56,7 @@ async fn claude_only_middleware(req: Request, next: Next) -> Response {
     (StatusCode::FORBIDDEN, body).into_response()
 }
 
-fn is_from_claude(headers: &HeaderMap) -> bool {
+fn is_from_claude(_headers: &HeaderMap) -> bool {
     true
 }
 

@@ -1,56 +1,33 @@
-# Use the latest Rust image for building
-FROM rust:1.89.0 AS builder
-
-# Set the working directory
+# ---- build ----
+FROM rust:1.89-alpine AS builder
+RUN apk add --no-cache musl-dev build-base ca-certificates
 WORKDIR /app
 
-# Copy the Cargo.toml and Cargo.lock files
+# Cache dependencies
 COPY Cargo.toml Cargo.lock ./
-
-# Create a dummy main.rs to build dependencies
 RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN rustup target add x86_64-unknown-linux-musl
+# Build deps against MUSL
+RUN cargo build --release --target x86_64-unknown-linux-musl && rm src/main.rs
 
-# Build dependencies (this layer will be cached if dependencies don't change)
-RUN cargo build --release && rm src/main.rs
-
-# Copy the source code
+# Build app (DuckDB bundled will compile C/C++ into the static binary)
 COPY src ./src
+RUN cargo build --release --target x86_64-unknown-linux-musl
 
-# Build the application
-RUN cargo build --release
-
-# Use a minimal runtime image
-FROM debian:bookworm-slim
-
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create a non-root user
-RUN useradd -m -s /bin/bash appuser
-
-# Set the working directory
+# ---- run ----
+FROM gcr.io/distroless/static:nonroot
 WORKDIR /app
 
-# Copy the binary from the builder stage
-COPY --from=builder /app/target/release/nest-mcp /app/nest-mcp
+# App binary
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/nest-mcp /app/nest-mcp
 
-# Copy the parquet data file
+# Optional: seed DB file (read-only in root FS). For writes, move/point to /tmp at runtime.
 COPY nest_mcp.db /app/nest_mcp.db
 
-# Change ownership to the non-root user
-RUN chown -R appuser:appuser /app
+# CA bundle for HTTPS if your app/DuckDB needs it
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
-# Switch to the non-root user
-USER appuser
-
-# Expose the port (Cloud Run will set PORT environment variable)
+ENV PORT=8080 RUST_LOG=info
 EXPOSE 8080
-
-# Set environment variables for Cloud Run
-ENV PORT=8080
-ENV RUST_LOG=info
-
-# Run the application
-CMD ["./nest-mcp", "serve"]
+USER nonroot
+CMD ["/app/nest-mcp","serve"]
